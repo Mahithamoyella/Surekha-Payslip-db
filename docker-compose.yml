@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./Backend
+    container_name: surekha-payslip-backend
+    ports:
+      - "3058:3058"
+    depends_on:
+      - postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin834
+      POSTGRES_DB: payslip_db
+
+  employee-side:
+    build: ./Employee-Side
+    container_name: surekha-payslip-employee
+    ports:
+      - "8061:80"
+
+  hr-side:
+    build: ./HR-Side
+    container_name: surekha-payslip-hr
+    ports:
+      - "8062:80"
+
+  postgres:
+    image: postgres:14
+    container_name: surekha-payslip-postgres
+    ports:
+      - "5456:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin834
+      POSTGRES_DB: payslip_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  postgres_data:
+
